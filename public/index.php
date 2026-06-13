@@ -24,7 +24,11 @@ require_once __DIR__ . '/../src/BitrixClient.php';
 require_once __DIR__ . '/../src/ReportBuilder.php';
 require_once __DIR__ . '/../src/Mailer.php';
 
-$client = new BitrixClient('', 207);
+$config = require __DIR__ . '/../config/config.php';
+$client = new BitrixClient(
+    $config['bitrix']['webhook_url'],
+    $config['bitrix']['group_id']
+);
 $tasks = $client->getClosedTasks($from, $to);
 
 echo '<pre>';
@@ -41,6 +45,9 @@ $result = $builder->formatToText($result);
 echo '<pre>';
 print_r($result);
 
-$mailer = new Mailer();
+$mailer = new Mailer(
+    $config['smtp']['host'],
+    $config['smtp']['port']
+);
 $mailer->send($email, (string)$result);
 

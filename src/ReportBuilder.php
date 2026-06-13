@@ -34,12 +34,17 @@ class ReportBuilder
             }
             ksort($report[$year]);
         }
+        ksort($report);
 
         return $report;
     }
 
     public function formatToText(array $calculatedData): string
     {
+        if (empty($calculatedData)) {
+            return 'За выбранный период закрытые задачи не найдены.';
+        }
+
         $lines = [];
 
         foreach ($calculatedData as $year => $quarters) {
